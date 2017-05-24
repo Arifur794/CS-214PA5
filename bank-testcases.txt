@@ -1,0 +1,211 @@
+PA5 bank-testcases
+Instructions for testing:
+ - In order for the programs to work, client processes must specify the name of the machine where the client expects to find the server process as a command line argument
+ - The server takes no command line arguments.
+------------------------------------------------------------------------------------------------------------------------------
+Test Case 0: Trying to connect to server while on another computer
+
+ - Find the local IP Address of the Server (for Ilabs/Linux  in terminal  the command is host <hostname> 
+ - This will get you the IP Address needed for the client to connect to the server
+ - Run the server on a seperate computer than your client
+ - Run the client using the IP Address you got from the host server. 
+  	- Ex: ./client 127.0.0.1
+  	
+Expected Output (when successful):
+
+Server will output:
+SUCCESS: Bind to port (PID number) , in my case 52966
+
+Client will output:
+Connection to Online Bank Successful
+-----------------------------------------------------------------------------------------------------------------------------
+Test Case 1: (Trying to connect to server and successful)
+
+ - Run server
+   - Ex: ./server
+ - Run client 
+   - Ex: (command line argument for client: ./client <ip address>) **without inputting ip address, the default address will be the localhost ip address of the computer**
+
+Expected Output (when connecting is a success):
+
+Server will output:
+SUCCESS: Bind to port (PID number) , in my case 52966 
+
+Client will output:
+Connected to server 127.0.0.1 (or some other host localhost)
+-------------------------------------------------------------------------
+Test Case 2: Trying To Connect and Unsuccessful
+ - Run Server
+ - Run Client
+ 
+ Expected Output:
+ No host name specified.  File client.c line 130.
+-------------------------------------------------------------------------
+
+Test Case 3: Opening/Starting an Account and Crediting/Debiting and Printing Balance
+
+ - Run server
+   	- Ex: ./server
+
+ - Run client 
+   	- Ex: (command line argument for same computer ./client localhost)
+
+ - In the client (after the client prompts the print options) type open and then write a specific name or string.
+   	- Ex: open Arifur Rahman
+
+ - Wait for the client to respond and then type start followed by the name of the account you would like to start.
+	- Ex: start Arifur Rahman
+
+ - Add money to the account by typing credit followed by the amount
+	- Ex: credit 500.00
+
+ - Subtract money to the account by typing debit followed by the amount (which must be less than the total amount in the account)
+   	- Ex: debit 50.00
+
+ - Type balance to print out the total balance in the account
+	- Ex: balance
+
+Expected Output by both Client/Server:
+
+Server Output:
+----------------------------------------
+Connection Accepted from SD: 5
+Bank Status:
+Arifur Rahman    0.00    
+
+Bank Status:
+Arifur Rahman    500.00          IN SERVICE
+
+Bank Status:
+Arifur Rahman    450.00          IN SERVICE
+
+----------------------------------------
+
+Client Output:
+
+Connected to server 127.0.0.1
+Input Command >> open Arifur Rahman
+Account successfully created
+
+Input Command >> start Arifur Rahman
+You are now starting: Arifur Rahman
+
+Input Command >> credit 500.00
+Arifur Rahman has $500.00  in the bank
+
+Input Command >> debit 50.00
+Arifur Rahman has $450.00  in the bank
+
+-------------------------------------------------------------------------
+Test Case 4: Trying to Open an account with a string length over 100 characters
+
+ - Run server and client
+ - open followed by string over 100 characters
+
+Example:
+
+Input Command >> open gewwetewtqewgferregwetwqetwetetetreterwtretertertertertertertgretertretwetwreterwtretretregeregergwrgergegergergregergergregwregrewgegerwgergergergergerwgregergwgrewrgregwergergergwergregergrg\
+
+
+Expected Output by Client:
+Could not add account to bank (name is over 100 characters or name already exists in system)
+-------------------------------------------------------------------------
+Test Case 5: Trying to Debit amount which is greater than the total balance
+
+ - Run server and client
+ - Open an account
+ - Credit a certain amount of money
+ - Debit an amount higher than the amount you credited or the total balance.
+
+Example:
+open arifur	
+start arifur
+credit 45
+debit 50
+
+Expected Output by Client:
+It keeps the current balance and doesn't debit anything
+-------------------------------------------------------------------------
+Test Case 6: Trying to open an account which has the same name
+
+ - Run server and client
+ - Open an account
+ - Open another account with the same name as the account you opened previously
+
+Expected Output by Client:
+Could not add account to bank (name is over 100 characters or name already exists in system)
+Easy to decipher between the two^
+-------------------------------------------------------------------------
+Test Case 7: Trying to start an account while running already on another client
+
+ - Run server and client
+ - Open an account
+ - Start the account on the client
+ - Open another client
+ - Start the same account name on the second client
+
+Expected Output by Client:
+Account in use
+-------------------------------------------------------------------------
+Test Case 8: Trying to start an account which does not exist
+
+ - Run server and client
+ - Start an account which does not exist
+Input Command >> start wtw
+Expected Output by Client:
+Could not find the input account name in the bank system
+-------------------------------------------------------------------------
+Test Case 9: Trying to open more than 20 bank accounts
+
+ - Run server and client
+ - Open 20+ different accounts
+
+Expected Output by Client:
+Too many accounts
+-------------------------------------------------------------------------
+Test Case 10: Opening an account, working on it, then finishing, and opening another account
+
+ - Run server and client
+ - open an account
+ - start the account
+ - credit/debit account
+ - type finish
+ - open another account
+ - start that account
+
+Expected Output from Client (Example):
+
+open cal      
+Account Added Successfully
+start cal
+Started session with account name : cal
+credit 500
+Account credited +500.000000
+finish
+Account released
+open brian
+Account Added
+start brian
+Started session with account name : brian
+-------------------------------------------------------------------------
+Test Case 11: Closing the Client
+
+ - Close a client
+Input Command >> exit
+
+Expected Output by Server (server will still be running however):
+Session Ended.
+-------------------------------------------------------------------------
+Test Case 12: Closing the Server
+
+ - Close a server
+
+Expected Output by Client (client will stop working altogether): 
+Session Ended.
+-------------------------------------------------------------------------
+Test Case 13: Exiting the Client Using Exit
+
+ - Type exit in a client
+
+Expected Output by Server (server will still be running however):
+Session Ended. 
